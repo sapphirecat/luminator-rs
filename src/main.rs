@@ -12,7 +12,7 @@ struct RGB888 {
 
 fn main() {
     println!("Welcome to luminator-rs (with NO new features!)");
-    let hex6 = Regex::new(r"(?i)([[:xdigit:]]{2})([[:xdigit:]]{2})([[:xdigit:]]{2})")
+    let hex6 = Regex::new(r"(?i)[[:xdigit:]]{6}")
         .unwrap();
 
     loop {
@@ -22,15 +22,15 @@ fn main() {
             .expect("stdin read_line");
 
         let mut found = 0;
-        for m in hex6.captures_iter(&line[..]) {
+        for m in hex6.find_iter(&line[..]) {
             found = found + 1;
-            match rgb_from_captures(&m) {
+            match rgb_from_match(&m) {
                 Ok(color) => {
                     let luma = luma_from_rgb(&color);
-                    println!("#{} luminance = {}%", &m[0], luma*100.0);
+                    println!("#{} luminance = {}%", &m.as_str(), luma*100.0);
                 },
                 Err(s) => {
-                    println!("{} on input {}", s, &m[0]);
+                    println!("{} on input {}", s, &m.as_str());
                 }
             };
         }
@@ -49,16 +49,20 @@ fn int_from_channel(channel: &str) -> u8 {
     }
 }
 
-fn rgb_from_captures (m: &regex::Captures) -> Result<RGB888, String> {
-    if m.len() == 4 {
+fn rgb_from_str (s: &str) -> Result<RGB888, String> {
+    if s.len() == 6 {
         Ok(RGB888 {
-            r: int_from_channel(&m[1]),
-            g: int_from_channel(&m[2]),
-            b: int_from_channel(&m[3])
+            r: int_from_channel(&s[0..2]),
+            g: int_from_channel(&s[2..4]),
+            b: int_from_channel(&s[4..6])
         })
     } else {
-        Err(String::from("Unexpected match length, should have 3 capture groups"))
+        Err(String::from("Unexpected string length, should have 6 hex characters"))
     }
+}
+
+fn rgb_from_match (m: &regex::Match) -> Result<RGB888, String> {
+    rgb_from_str(&m.as_str())
 }
 
 fn luma_from_rgb (color: &RGB888) -> f64 {
