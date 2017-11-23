@@ -27,7 +27,7 @@ fn main() {
             match rgb_from_captures(&m) {
                 Ok(color) => {
                     let luma = luma_from_rgb(&color);
-                    println!("#{} luminance = {}", &m[0], luma);
+                    println!("#{} luminance = {}%", &m[0], luma*100.0);
                 },
                 Err(s) => {
                     println!("{} on input {}", s, &m[0]);
@@ -65,5 +65,5 @@ fn luma_from_rgb (color: &RGB888) -> f64 {
     let r = color.r as f64;
     let g = color.g as f64;
     let b = color.b as f64;
-    0.299 * r + 0.587 * g + 0.114 * b
+    (0.299 * r + 0.587 * g + 0.114 * b) / 255.0
 }
