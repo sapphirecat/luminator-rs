@@ -1,0 +1,7 @@
+[package]
+name = "luminator-rs"
+version = "0.1.0"
+authors = ["Sapphire Cat <devel@sapphirepaw.org>"]
+
+[dependencies]
+regex = "0.2"
