@@ -17,12 +17,7 @@ fn main() {
         let mut found = 0;
         for m in hex6.captures_iter(&line[..]) {
             found = found + 1;
-
-            let r = value_of_channel(&m[1]);
-            let g = value_of_channel(&m[2]);
-            let b = value_of_channel(&m[3]);
-
-            let luma = 0.299 * r + 0.587 * g + 0.114 * b;
+            let luma = luma_for_match(&m);
             println!("#{} luminance = {}", &m[0], luma);
         }
 
@@ -38,4 +33,16 @@ fn value_of_channel(channel: &str) -> f64 {
         Ok(b) => b as f64,
         Err(_) => 0.0
     }
+}
+
+fn luma_for_match (m: &regex::Captures) -> f64 {
+    if m.len() < 4 {
+        return -1.0
+    }
+
+    let r = value_of_channel(&m[1]);
+    let g = value_of_channel(&m[2]);
+    let b = value_of_channel(&m[3]);
+
+    0.299 * r + 0.587 * g + 0.114 * b
 }
