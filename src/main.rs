@@ -9,7 +9,7 @@ fn main() {
         .unwrap();
 
     loop {
-        println!("Enter a hexadecimal color code...");
+        println!("Enter a hexadecimal color code (rrggbb)...");
         let mut line = String::new();
         io::stdin().read_line(&mut line)
             .expect("stdin read_line");
