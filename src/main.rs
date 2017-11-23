@@ -24,7 +24,7 @@ fn main() {
         let mut found = 0;
         for m in hex6.find_iter(&line[..]) {
             found = found + 1;
-            match rgb_from_match(&m) {
+            match rgb_from_str(&m.as_str()) {
                 Ok(color) => {
                     let luma = luma_from_rgb(&color);
                     println!("#{} luminance = {:>5.1}%", &m.as_str(), luma*100.0);
@@ -59,10 +59,6 @@ fn rgb_from_str (s: &str) -> Result<RGB888, String> {
     } else {
         Err(String::from("Unexpected string length, should have 6 hex characters"))
     }
-}
-
-fn rgb_from_match (m: &regex::Match) -> Result<RGB888, String> {
-    rgb_from_str(&m.as_str())
 }
 
 fn luma_from_rgb (color: &RGB888) -> f64 {
