@@ -27,7 +27,7 @@ fn main() {
             match rgb_from_match(&m) {
                 Ok(color) => {
                     let luma = luma_from_rgb(&color);
-                    println!("#{} luminance = {}%", &m.as_str(), luma*100.0);
+                    println!("#{} luminance = {:>5.1}%", &m.as_str(), luma*100.0);
                 },
                 Err(s) => {
                     println!("{} on input {}", s, &m.as_str());
